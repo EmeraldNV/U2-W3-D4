@@ -1,24 +1,28 @@
-let urlAPI = "https://api.pexels.com/v1/search?query=hamsters";
+const urlModified = function (element) {
+  let urlAPI = "https://api.pexels.com/v1/search?query=" + element;
+  return urlAPI;
+};
 
-async function callHamsterImages() {
-  const response = await fetch(urlAPI, {
+async function callImages(element) {
+  const url = urlModified(element);
+  const response = await fetch(url, {
     headers: {
       Authorization: "2D1lSw7qd8md6FNr2RMNCdCLOHM4xbSvh6Kl1htVIm6wmy7S6igWFw8k",
     },
   });
   try {
     if (!response.ok) {
-      throw new error("ERRORE", error);
+      throw new Error("ERRORE", error);
     }
-    const data = response.json();
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("ERRORE", error);
   }
 }
 
-async function getImages() {
-  const data = await callHamsterImages();
+async function getImages(element) {
+  const data = await callImages(element);
   const arrayImages = [];
 
   for (let i = 0; i < 10; i++) {
@@ -47,13 +51,15 @@ async function assignDataImages(arrayImages) {
 async function loadImages() {
   const loadButton = document.querySelector(".btn.btn-primary.my-2");
   loadButton.addEventListener("click", () => {
-    urlAPI = "https://api.pexels.com/v1/search?query=hamsters";
-    assignDataImages(getImages());
+    let SearchSubjectDefault = "hamsters";
+    urlModified(SearchSubjectDefault);
+    assignDataImages(getImages("hamsters"));
   });
   const loadSecondaryButton = document.querySelector(".btn.btn-secondary.my-2");
   loadSecondaryButton.addEventListener("click", () => {
-    urlAPI = "https://api.pexels.com/v1/search?query=tigers";
-    assignDataImages(getImages());
+    let SearchSubjectDefault = "tigers";
+    urlModified(SearchSubjectDefault);
+    assignDataImages(getImages("tigers"));
   });
 }
 
